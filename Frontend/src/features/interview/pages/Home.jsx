@@ -1,11 +1,11 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import "../style/home.scss"
 import { useInterview } from '../hooks/useInterview.js'
 import { useNavigate } from 'react-router'
 
 const Home = () => {
 
-    const { loading, generateReport,reports } = useInterview()
+    const { loading, generateReport, getReports, reports } = useInterview()
     const [ jobDescription, setJobDescription ] = useState("")
     const [ selfDescription, setSelfDescription ] = useState("")
     const [ resumeFile, setResumeFile ] = useState(null)
@@ -13,6 +13,10 @@ const Home = () => {
     const [ error, setError ] = useState("")
 
     const navigate = useNavigate()
+
+    useEffect(() => {
+        getReports()
+    }, [ getReports ])
 
     const MAX_RESUME_SIZE = 3 * 1024 * 1024 // must match the backend upload limit
 

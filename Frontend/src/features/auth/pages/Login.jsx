@@ -10,11 +10,17 @@ const Login = () => {
 
     const [ email, setEmail ] = useState("")
     const [ password, setPassword ] = useState("")
+    const [ error, setError ] = useState("")
 
     const handleSubmit = async (e) => {
         e.preventDefault()
-        await handleLogin({email,password})
-        navigate('/')
+        setError("")
+        try {
+            await handleLogin({email,password})
+            navigate("/")
+        } catch (err) {
+            setError(err.response?.data?.message || "Something went wrong. Please try again.")
+        }
     }
 
     if(loading){
@@ -30,15 +36,18 @@ const Login = () => {
                     <div className="input-group">
                         <label htmlFor="email">Email</label>
                         <input
+                            value={email}
                             onChange={(e) => { setEmail(e.target.value) }}
                             type="email" id="email" name='email' placeholder='Enter email address' />
                     </div>
                     <div className="input-group">
                         <label htmlFor="password">Password</label>
                         <input
+                            value={password}
                             onChange={(e) => { setPassword(e.target.value) }}
                             type="password" id="password" name='password' placeholder='Enter password' />
                     </div>
+                    {error && <p className='form-error'>{error}</p>}
                     <button className='button primary-button' >Login</button>
                 </form>
                 <p>Don't have an account? <Link to={"/register"} >Register</Link> </p>

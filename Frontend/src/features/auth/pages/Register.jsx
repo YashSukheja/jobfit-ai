@@ -8,13 +8,19 @@ const Register = () => {
     const [ username, setUsername ] = useState("")
     const [ email, setEmail ] = useState("")
     const [ password, setPassword ] = useState("")
+    const [ error, setError ] = useState("")
 
     const {loading,handleRegister} = useAuth()
     
     const handleSubmit = async (e) => {
         e.preventDefault()
-        await handleRegister({username,email,password})
-        navigate("/")
+        setError("")
+        try {
+            await handleRegister({username,email,password})
+            navigate("/")
+        } catch (err) {
+            setError(err.response?.data?.message || "Something went wrong. Please try again.")
+        }
     }
 
     if(loading){
@@ -31,22 +37,26 @@ const Register = () => {
                     <div className="input-group">
                         <label htmlFor="username">Username</label>
                         <input
+                            value={username}
                             onChange={(e) => { setUsername(e.target.value) }}
                             type="text" id="username" name='username' placeholder='Enter username' />
                     </div>
                     <div className="input-group">
                         <label htmlFor="email">Email</label>
                         <input
+                            value={email}
                             onChange={(e) => { setEmail(e.target.value) }}
                             type="email" id="email" name='email' placeholder='Enter email address' />
                     </div>
                     <div className="input-group">
                         <label htmlFor="password">Password</label>
                         <input
+                            value={password}
                             onChange={(e) => { setPassword(e.target.value) }}
                             type="password" id="password" name='password' placeholder='Enter password' />
                     </div>
 
+                    {error && <p className='form-error'>{error}</p>}
                     <button className='button primary-button' >Register</button>
 
                 </form>

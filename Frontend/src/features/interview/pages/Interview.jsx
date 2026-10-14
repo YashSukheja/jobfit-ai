@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import '../style/interview.scss'
 import { useInterview } from '../hooks/useInterview.js'
-import { useNavigate, useParams } from 'react-router'
+import { Link, useParams } from 'react-router'
 
 
 
@@ -62,15 +62,26 @@ const Interview = () => {
     const { report, getReportById, loading, getResumePdf } = useInterview()
     const { interviewId } = useParams()
 
+    const [ notFoundId, setNotFoundId ] = useState(null)
+
     useEffect(() => {
-        if (interviewId) {
-            getReportById(interviewId)
-        }
-    }, [ interviewId ])
+        getReportById(interviewId).then((data) => {
+            if (!data) setNotFoundId(interviewId)
+        })
+    }, [ interviewId, getReportById ])
 
 
+    if (notFoundId === interviewId) {
+        return (
+            <main className='loading-screen'>
+                <h1>Interview plan not found.</h1>
+                <Link to='/'>Back to home</Link>
+            </main>
+        )
+    }
 
-    if (loading || !report) {
+    /* also wait while a previously viewed report is still in context */
+    if (loading || !report || report._id !== interviewId) {
         return (
             <main className='loading-screen'>
                 <h1>Loading your interview plan...</h1>

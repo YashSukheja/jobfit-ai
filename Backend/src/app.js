@@ -27,6 +27,10 @@ app.use((err, req, res, next) => {
         return res.status(400).json({ message: "Resume must be smaller than 3MB." })
     }
 
+    if (err.name === "CastError") {
+        return res.status(404).json({ message: "Interview report not found." })
+    }
+
     console.log(err)
     res.status(500).json({ message: "Something went wrong. Please try again." })
 })

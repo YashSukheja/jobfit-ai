@@ -27,13 +27,16 @@ async function generateInterViewReportController(req, res) {
     let resume = ""
 
     if (req.file) {
+        const parser = new pdfParse.PDFParse({ data: req.file.buffer })
         try {
-            const resumeContent = await (new pdfParse.PDFParse(Uint8Array.from(req.file.buffer))).getText()
+            const resumeContent = await parser.getText()
             resume = resumeContent.text
-        } catch (err) {
+        } catch {
             return res.status(400).json({
                 message: "Could not read the resume. Please upload a valid PDF file."
             })
+        } finally {
+            await parser.destroy()
         }
     }
 
@@ -99,7 +102,7 @@ async function getAllInterviewReportsController(req, res) {
 async function generateResumePdfController(req, res) {
     const { interviewReportId } = req.params
 
-    const interviewReport = await interviewReportModel.findById(interviewReportId)
+    const interviewReport = await interviewReportModel.findOne({ _id: interviewReportId, user: req.user.id })
 
     if (!interviewReport) {
         return res.status(404).json({

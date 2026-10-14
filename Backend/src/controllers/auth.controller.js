@@ -66,6 +66,12 @@ async function loginUserController(req, res) {
 
     const { email, password } = req.body
 
+    if (!email || !password) {
+        return res.status(400).json({
+            message: "Please provide email and password"
+        })
+    }
+
     const user = await userModel.findOne({ email })
 
     if (!user) {
@@ -128,7 +134,11 @@ async function getMeController(req, res) {
 
     const user = await userModel.findById(req.user.id)
 
-
+    if (!user) {
+        return res.status(404).json({
+            message: "User not found"
+        })
+    }
 
     res.status(200).json({
         message: "User details fetched successfully",
