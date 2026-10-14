@@ -1,4 +1,4 @@
-# HireReady AI
+# JobFit AI
 
 > An AI interview coach. Upload your resume, paste a job description, and get a personalized interview prep report plus a resume tailored to that job, generated with Google Gemini.
 
@@ -63,8 +63,8 @@
 ### 1. Clone the repo
 
 ```bash
-git clone https://github.com/<your-username>/hireready-ai.git
-cd hireready-ai
+git clone https://github.com/<your-username>/jobfit-ai.git
+cd jobfit-ai
 ```
 
 ### 2. Backend

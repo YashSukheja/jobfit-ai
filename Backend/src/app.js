@@ -21,5 +21,16 @@ app.use("/api/auth", authRouter)
 app.use("/api/interview", interviewRouter)
 
 
+/* error handler */
+app.use((err, req, res, next) => {
+    if (err.code === "LIMIT_FILE_SIZE") {
+        return res.status(400).json({ message: "Resume must be smaller than 3MB." })
+    }
+
+    console.log(err)
+    res.status(500).json({ message: "Something went wrong. Please try again." })
+})
+
+
 
 module.exports = app
