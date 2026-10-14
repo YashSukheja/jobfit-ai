@@ -4,9 +4,9 @@ const bcrypt = require("bcryptjs")
 const userModel = require("../src/models/user.model")
 
 const DEMO_USER = {
-    username: "demo",
-    email: "demo@jobfit.ai",
-    password: "demo1234"
+    username: process.env.DEMO_USERNAME || "demo",
+    email: process.env.DEMO_EMAIL || "demo@jobfit.ai",
+    password: process.env.DEMO_PASSWORD || "demo1234"
 }
 
 async function seedDemoUser() {

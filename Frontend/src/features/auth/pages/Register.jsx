@@ -19,7 +19,12 @@ const Register = () => {
             await handleRegister({username,email,password})
             navigate("/")
         } catch (err) {
-            setError(err.response?.data?.message || "Something went wrong. Please try again.")
+            console.log(err)
+            if (!err.response) {
+                setError("Can't reach the server. Make sure the backend is running (npm run dev in Backend).")
+            } else {
+                setError(err.response.data?.message || `Request failed (${err.response.status}). Please try again.`)
+            }
         }
     }
 
